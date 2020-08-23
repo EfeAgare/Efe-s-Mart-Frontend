@@ -20,7 +20,7 @@ const allProductsReducer = function (state = initialState, action) {
             };
         }
         case Actions.GET_ALL_PRODUCTS_SUCCESS:
-        {
+            {
             return {
                 ...state,
                 data: action.payload,

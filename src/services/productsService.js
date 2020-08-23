@@ -1,131 +1,145 @@
 import axios from 'axios';
-import EventEmitter from '../utils/EventEmitter';
+// import EventEmitter from '../utils/EventEmitter';
 import systemConfig from '../config/system';
 
-class productsService extends EventEmitter {
+class productsService {
+  constructor() {
+    this.setDefaults();
+  }
 
-    constructor() {
-        super();
+  setDefaults = () => {
+    axios.defaults.headers.common['Content-Type'] = 'application/json';
+    axios.defaults.headers.common['Accept'] = 'application/json';
+  };
 
-        this.setDefaults();
+  getAllProducts = async ({ page, limit, description_length }) => {
+    try {
+      const { data } = await axios.get(
+        systemConfig.serverBaseUrl + '/products',
+        {
+          params: {
+            page,
+            limit,
+            description_length,
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+      throw error.response;
     }
+  };
 
-    setDefaults = () => {
-        axios.defaults.headers.common['Content-Type'] = 'application/json';
-        axios.defaults.headers.common['Accept'] = 'application/json';
-    };
+  searchProducts = async ({
+    query_string,
+    all_words,
+    page,
+    limit,
+    description_length,
+  }) => {
+    try {
+      const { data } = axios.get(
+        systemConfig.serverBaseUrl + '/products/search',
+        {
+          params: {
+            query_string,
+            all_words,
+            page,
+            limit,
+            description_length,
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
 
+  getProductsInCategory = async ({ category_id }) => {
+    try {
+      const { data } = axios.get(
+        systemConfig.serverBaseUrl + `/products/inCategory/${category_id}`
+      );
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
 
-    getAllProducts = ({page, limit, description_length }) => {
-        return new Promise((resolve, reject) => {
-            axios.get(systemConfig.serverBaseUrl + '/products', {
-                params: {
-                    page,
-                    limit,
-                    description_length
-                }
-            }).then(response => {
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error.response);
-            });
-        });
-    };
+  getProductsInDepartment = ({ department_id }) => {
+    try {
+      const { data } = axios.get(
+        systemConfig.serverBaseUrl + `/products/inDepartment/${department_id}`
+      );
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
 
-    searchProducts = ({ query_string, all_words, page, limit, description_length }) => {
-        return new Promise((resolve, reject) => {
-            axios.get(systemConfig.serverBaseUrl + '/products/search', {
-                params: {
-                    query_string,
-                    all_words,
-                    page,
-                    limit,
-                    description_length
-                }
-            }).then(response => {
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error.response);
-            });
-        });
-    };
+  /* ---------------------------------------------- */
+  /* The Following Methods are for a single product */
+  /* ---------------------------------------------- */
 
-    getProductsInCategory = ({ category_id }) => {
-        return new Promise((resolve, reject) => {
-            axios.get(systemConfig.serverBaseUrl + `/products/inCategory/${category_id}`).then(response => {
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error.response);
-            });
-        });
-    };
+  getProductById = async ({ product_id }) => {
+    try {
+      const { data } = await axios.get(systemConfig.serverBaseUrl + `/products/${product_id}`);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
 
-    getProductsInDepartment = ({ department_id }) => {
-        return new Promise((resolve, reject) => {
-            axios.get(systemConfig.serverBaseUrl + `/products/inDepartment/${department_id}`).then(response => {
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error.response);
-            });
-        });
-    };
+  getProductDetails = async ({ product_id }) => {
+    try {
+      const { data } = await axios.get(
+        systemConfig.serverBaseUrl + `/products/${product_id}/details`
+      );
 
-    /* ---------------------------------------------- */
-    /* The Following Methods are for a single product */
-    /* ---------------------------------------------- */
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
 
-    getProductById = ({ product_id }) => {
-        return new Promise((resolve, reject) => {
-            axios.get(systemConfig.serverBaseUrl + `/products/${product_id}`).then(response => {
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error.response);
-            });
-        });
-    };
+  getProductLocations = async ({ product_id }) => {
+    try {
+      const { data } = await axios.get(
+        systemConfig.serverBaseUrl + `/products/${product_id}/locations`
+      );
+        return data
+    } catch (error) {
+      throw error;
+    }
+  };
 
-    getProductDetails = ({ product_id }) => {
-        return new Promise((resolve, reject) => {
-            axios.get(systemConfig.serverBaseUrl + `/products/${product_id}/details`).then(response => {
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error.response);
-            });
-        });
-    };
+  getProductReviews = async ({ product_id }) => {
+    try {
+      const { data } = await axios.get(
+        systemConfig.serverBaseUrl + `/products/${product_id}/reviews`
+      );
+        return data
+    } catch (error) {
+      throw error.response;
+    }
+  };
 
-    getProductLocations = ({ product_id }) => {
-        return new Promise((resolve, reject) => {
-            axios.get(systemConfig.serverBaseUrl + `/products/${product_id}/locations`).then(response => {
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error.response);
-            });
-        });
-    };
+  createProductReview = async ({ product_id, review, rating }) => {
+    try {
+      const { data } = await axios.post(
+        systemConfig.serverBaseUrl + `/products/${product_id}/reviews`,
+        {
+          review,
+          rating,
+        }
+      );
 
-    getProductReviews = ({ product_id }) => {
-        return new Promise((resolve, reject) => {
-            axios.get(systemConfig.serverBaseUrl + `/products/${product_id}/reviews`).then(response => {
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error.response);
-            });
-        });
-    };
-
-    createProductReview = ({ product_id, review, rating }) => {
-        return new Promise((resolve, reject) => {
-            axios.post(systemConfig.serverBaseUrl + `/products/${product_id}/reviews`, {
-                review,
-                rating
-            }).then(response => {
-                resolve(response.data.user);
-            }).catch((error) => {
-                reject(error.response);
-            });
-        });
-    };
+      return data;
+    } catch (error) {
+      throw error.response;
+    }
+  };
 }
 
 const instance = new productsService();
