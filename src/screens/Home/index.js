@@ -257,7 +257,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-function mapStateToProps({products, categories, departments}) {
+function mapStateToProps({ products, categories, departments }) {
     return {
         products: products.all.data.rows,
     }
