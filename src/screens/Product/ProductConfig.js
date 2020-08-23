@@ -11,7 +11,7 @@ const ProductConfig = {
     name: 'Product',
     routes  : [
         {
-            path     : '/product/:id?',
+            path     : '/products/:id?',
             component: Product
         }
     ]
