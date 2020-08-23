@@ -1,5 +1,5 @@
 {
-  "name": "turing-ecommerce",
+  "name": "Efe's-Mart",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -62,5 +62,6 @@
   },
   "devDependencies": {
     "tailwindcss": "^1.0.1"
-  }
+  },
+  "proxy": "http://localhost:8000"
 }
